@@ -104,4 +104,4 @@ def handler(k: bytes, request: Union[str, dict]) -> dict:
     return {'status': 'failure'}
 
 if __name__ == "__main__":
-    doctest.testmod()
+    doctest.testmod() # pragma: no cover
