@@ -16,12 +16,18 @@ import oprf
 def key() -> bytes:
     """
     Create a secret/private key to be maintained by the service.
+
+    >>> len(key())
+    32
     """
     return bcl.symmetric.secret()
 
 def key_base64() -> bytes:
     """
     Create a secret/private key to be maintained by the service.
+
+    >>> len(base64.standard_b64decode(key_base64()))
+    32
     """
     return base64.standard_b64encode(bcl.symmetric.secret()).decode('utf-8')
 
@@ -30,6 +36,12 @@ def mask(k: bytes, m: oprf.mask = None, d: oprf.data = None) -> Union[oprf.mask,
     Function implementing service: returns a new encrypted mask if no
     mask or data is supplied, or applies the decrypted mask if both are
     supplied.
+
+    >>> k = key()
+    >>> m = mask(k)
+    >>> d = oprf.data.hash('abc')
+    >>> mask(k, m, d) == oprf.mask(bcl.symmetric.decrypt(k, m))(d)
+    True
     """
     # If no mask is supplied, return a new encrypted mask.
     if m is None:
@@ -42,6 +54,30 @@ def handler(k: bytes, request: Union[str, dict]) -> dict:
     """
     Wrapper for service function that accepts inputs as a JSON
     string or Python dictionary.
+
+    >>> k = key()
+    >>> r = handler(k, {})
+    >>> r['status'] == 'success'
+    True
+    >>> r = handler(k, '{}')
+    >>> r['status'] == 'success'
+    True
+    >>> m = oprf.mask.from_base64(r['mask'][0])
+    >>> d = oprf.data.hash('abc')
+    >>> mask(k, m, d) == oprf.mask(bcl.symmetric.decrypt(k, m))(d)
+    True
+    >>> r = handler(k, {'mask': [m.to_base64()], 'data': [d.to_base64()]})
+    >>> r['status'] == 'success'
+    True
+    >>> (m_str, d_str) = (str(m.to_base64()), str(d.to_base64()))
+    >>> r = handler(k, '{"mask": ["' + m_str + '"], "data": ["' + d_str + '"]}')
+    >>> r['status'] == 'success'
+    True
+    >>> oprf.data.from_base64(r['data'][0]) == oprf.mask(bcl.symmetric.decrypt(k, m))(d)
+    True
+    >>> r = handler(k, {'mask': [m.to_base64()]})
+    >>> r['status']
+    'failure'
     """
     # Convert request to a dictionary if it is a JSON string.
     request = json.loads(request) if isinstance(request, str) else request
