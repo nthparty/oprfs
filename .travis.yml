@@ -19,8 +19,10 @@ matrix:
         - cd ..
       install:
         - pip install pylint
-        - pip install coverage
+        - pip install coveralls
         - pip install .
+      after_success:
+        - coveralls
     - os: osx
       osx_image: xcode10.2
       language: shell
