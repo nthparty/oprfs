@@ -31,6 +31,45 @@ The library can be imported in the usual ways::
     import oprfs
     from oprfs import *
 
+Deployment Example: HTTP Server and Client
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Below is in illustration of how an instance of the OPRF service might be deployed using `Flask <https://flask.palletsprojects.com/>`_.
+
+    import oprfs
+    import flask
+    app = flask.Flask(__name__)
+
+    # Normally, a persistent key should be retrieved from secure storage.
+    # Here, a new key is created each time so older masks cannot be reused
+    # once the service is restarted.
+    key = oprfs.key()
+
+    @app.route('/', methods=['POST'])
+    def endpoint():
+        # Call the handler with the key and request, then return the response.
+        return flask.jsonify(oprfs.handler(key, flask.request.get_json()))
+
+    app.run()
+
+Once an instance of the above service is running, a client might interact with it as illustrated in the example below. Note the use of the distinct `oprf <https://pypi.org/project/oprf/>`_ library to represent a data instance (which is itself a wrapper for an `Ed25519 <https://ed25519.cr.yp.to/>`_ group element as represented by an instance of the ``point`` class in the `oblivious <https://pypi.org/project/oblivious/>`_ library).
+
+    import json
+    import requests
+    import oprf
+
+    # Request an encrypted mask.
+    response = requests.post('http://localhost:5000', json={})
+    mask_encrypted = json.loads(response.text)['mask'][0]
+
+    # Mask some data.
+    data = oprf.data.hash('abc').to_base64()
+    response = requests.post(
+        'http://localhost:5000',
+        json={'mask': [mask_encrypted], 'data': [data]}
+    )
+    data_masked = oprf.data.from_base64(json.loads(response.text)['data'][0])
+
 Testing and Conventions
 -----------------------
 All unit tests are executed and their coverage is measured when using `nose <https://nose.readthedocs.io/>`_ (see ``setup.cfg`` for configution details)::
