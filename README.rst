@@ -34,7 +34,7 @@ The library can be imported in the usual ways::
 Deployment Example: HTTP Server and Client
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Below is in illustration of how an instance of the OPRF service might be deployed using `Flask <https://flask.palletsprojects.com/>`_.
+Below is in illustration of how an instance of the OPRF service might be deployed using `Flask <https://flask.palletsprojects.com/>`_::
 
     import oprfs
     import flask
@@ -52,7 +52,7 @@ Below is in illustration of how an instance of the OPRF service might be deploye
 
     app.run()
 
-Once an instance of the above service is running, a client might interact with it as illustrated in the example below. Note the use of the distinct `oprf <https://pypi.org/project/oprf/>`_ library to represent a data instance (which is itself a wrapper for an `Ed25519 <https://ed25519.cr.yp.to/>`_ group element as represented by an instance of the ``point`` class in the `oblivious <https://pypi.org/project/oblivious/>`_ library).
+Once an instance of the above service is running, a client might interact with it as illustrated in the example below. Note the use of the distinct `oprf <https://pypi.org/project/oprf/>`_ library to represent a data instance (which is itself a wrapper for an `Ed25519 <https://ed25519.cr.yp.to/>`_ group element as represented by an instance of the ``point`` class in the `oblivious <https://pypi.org/project/oblivious/>`_ library)::
 
     import json
     import requests
