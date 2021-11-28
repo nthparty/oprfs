@@ -1,12 +1,16 @@
 from setuptools import setup
 
 with open("README.rst", "r") as fh:
-    long_description = fh.read()
+    long_description = fh.read().replace(".. include:: toc.rst\n\n", "")
+
+# The lines below can be parsed by `docs/conf.py`.
+name = "oprfs"
+version = "0.1.0"
 
 setup(
-    name="oprfs",
-    version="0.1.0",
-    packages=["oprfs",],
+    name=name,
+    version=version,
+    packages=[name,],
     install_requires=["bcl>=0.1.1", "oprf>=1.0.0"],
     license="MIT",
     url="https://github.com/nthparty/oprfs",
