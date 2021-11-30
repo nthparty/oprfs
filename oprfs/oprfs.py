@@ -22,7 +22,7 @@ def key() -> bytes:
     """
     return bcl.symmetric.secret()
 
-def key_base64() -> bytes:
+def key_base64() -> str:
     """
     Create a secret/private key to be maintained by the service.
 
@@ -48,7 +48,7 @@ def mask(k: bytes, m: oprf.mask = None, d: oprf.data = None) -> Union[oprf.mask,
         return bcl.symmetric.encrypt(k, oprf.mask())
 
     # Return the masked data.
-    return oprf.mask(bcl.symmetric.decrypt(k, m))(d)
+    return oprf.mask(bcl.symmetric.decrypt(k, bcl.cipher(m)))(d)
 
 def handler(k: bytes, request: Union[str, dict]) -> dict:
     """
