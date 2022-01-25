@@ -64,7 +64,7 @@ def handler(k: bytes, request: Union[str, dict]) -> dict:
     True
     >>> m = oprf.mask.from_base64(r['mask'][0])
     >>> d = oprf.data.hash('abc')
-    >>> mask(k, m, d) == oprf.mask(bcl.symmetric.decrypt(k, m))(d)
+    >>> mask(k, m, d) == oprf.mask(bcl.symmetric.decrypt(k, bcl.cipher(m)))(d)
     True
     >>> r = handler(k, {'mask': [m.to_base64()], 'data': [d.to_base64()]})
     >>> r['status'] == 'success'
@@ -73,7 +73,7 @@ def handler(k: bytes, request: Union[str, dict]) -> dict:
     >>> r = handler(k, '{"mask": ["' + m_str + '"], "data": ["' + d_str + '"]}')
     >>> r['status'] == 'success'
     True
-    >>> oprf.data.from_base64(r['data'][0]) == oprf.mask(bcl.symmetric.decrypt(k, m))(d)
+    >>> oprf.data.from_base64(r['data'][0]) == oprf.mask(bcl.symmetric.decrypt(k, bcl.cipher(m)))(d)
     True
     >>> r = handler(k, {'mask': [m.to_base64()]})
     >>> r['status']
