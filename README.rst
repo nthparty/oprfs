@@ -4,14 +4,15 @@ oprfs
 
 Easy-to-deploy oblivious pseudo-random function (OPRF) service that allows other parties (typically participants in some secure multi-party computation protocol) to obtain a persistent mask which they cannot decrypt but which they can safely apply (via requests to the service) to private data values of their choice.
 
-|pypi| |travis| |coveralls|
+|pypi| |actions| |coveralls|
 
 .. |pypi| image:: https://badge.fury.io/py/oprfs.svg
    :target: https://badge.fury.io/py/oprfs
    :alt: PyPI version and link.
 
-.. |travis| image:: https://travis-ci.com/nthparty/oprfs.svg?branch=main
-   :target: https://travis-ci.com/nthparty/oprfs
+.. |actions| image:: https://github.com/nthparty/oprfs/workflows/lint-test-cover-docs/badge.svg
+   :target: https://github.com/nthparty/oprfs/actions/workflows/lint-test-cover-docs.yml
+   :alt: GitHub Actions status.
 
 .. |coveralls| image:: https://coveralls.io/repos/github/nthparty/oprfs/badge.svg?branch=main
    :target: https://coveralls.io/github/nthparty/oprfs?branch=main
