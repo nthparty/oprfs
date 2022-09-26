@@ -23,7 +23,7 @@ Easy-to-deploy oblivious pseudo-random function (OPRF) service that allows other
 
 Purpose
 -------
-This library makes it possible to deploy a service that allows other parties to request an encrypted mask (which they cannot decrypt themselves but the service can decrypt) for an `oblivious pseudo-random function (OPRF) <https://en.wikipedia.org/wiki/Pseudorandom_function_family>`_ protocol. Those other parties can then ask the service to apply the mask to their own private, encrypted data values (which the service cannot decrypt). Thanks to the underlying `oblivious <https://pypi.org/project/oblivious/>`_ library, users of this library have the option of relying either on pure Python implementations of cryptographic primitives or on wrappers for `libsodium <https://github.com/jedisct1/libsodium>`_.
+This library makes it possible to deploy a service that allows other parties to request an encrypted mask (which they cannot decrypt themselves but the service can decrypt) for an `oblivious pseudo-random function (OPRF) <https://en.wikipedia.org/wiki/Pseudorandom_function_family>`_ protocol. Those other parties can then ask the service to apply the mask to their own private, encrypted data values (which the service cannot decrypt). Thanks to the underlying `oblivious <https://pypi.org/project/oblivious>`__ library, method implementations rely on cryptographic primitives found within the `libsodium <https://github.com/jedisct1/libsodium>`__ library.
 
 Package Installation and Usage
 ------------------------------
