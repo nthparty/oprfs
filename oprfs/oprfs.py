@@ -1,10 +1,14 @@
-"""OPRF service request handler and request construction client.
-
-Oblivious pseudo-random function (OPRF) service request handler
-(that serves as an endpoint for the service) and client request
-construction class (to help clients build requests concisely).
 """
+Easy-to-deploy oblivious pseudo-random function (OPRF) service that allows
+other parties (typically participants in some secure multi-party computation
+protocol) to obtain a persistent mask which they cannot decrypt but which they
+can safely apply (via requests to the service) to private data values of their
+choice.
 
+This module includes an OPRF service request handler (that serves as an
+endpoint for the service) and client request construction class (to help
+clients build requests concisely).
+"""
 from __future__ import annotations
 from typing import Union
 import doctest
@@ -70,7 +74,8 @@ def handler(k: bytes, request: Union[str, dict]) -> dict:
     >>> r['status'] == 'success'
     True
     >>> (m_str, d_str) = (str(m.to_base64()), str(d.to_base64()))
-    >>> r = handler(k, '{"mask": ["' + m_str + '"], "data": ["' + d_str + '"]}')
+    >>> s = '{"mask": ["' + m_str + '"], "data": ["' + d_str + '"]}'
+    >>> r = handler(k, s)
     >>> r['status'] == 'success'
     True
     >>> oprf.data.from_base64(r['data'][0]) == oprf.mask(bcl.symmetric.decrypt(k, bcl.cipher(m)))(d)
@@ -103,5 +108,5 @@ def handler(k: bytes, request: Union[str, dict]) -> dict:
 
     return {'status': 'failure'}
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     doctest.testmod() # pragma: no cover
