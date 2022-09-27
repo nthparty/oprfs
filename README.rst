@@ -23,7 +23,7 @@ Easy-to-deploy oblivious pseudo-random function (OPRF) service that allows other
 
 Purpose
 -------
-This library makes it possible to deploy a service that allows other parties to request an encrypted mask (which they cannot decrypt themselves but the service can decrypt) for an `oblivious pseudo-random function (OPRF) <https://en.wikipedia.org/wiki/Pseudorandom_function_family>`__ protocol. Those other parties can then ask the service to apply the mask to their own private, encrypted data values (which the service cannot decrypt). Thanks to the underlying `oblivious <https://pypi.org/project/oblivious>`__ library, method implementations rely on cryptographic primitives found within the `libsodium <https://github.com/jedisct1/libsodium>`__ library.
+This library makes it possible to deploy a service that allows other parties to request an encrypted mask (which they cannot decrypt themselves but the service can decrypt) for an oblivious `pseudo-random function <https://en.wikipedia.org/wiki/Pseudorandom_function_family>`__ (OPRF) protocol. Those other parties can then ask the service to apply the mask to their own private, encrypted data values (which the service cannot decrypt). Thanks to the underlying `oblivious <https://pypi.org/project/oblivious>`__ library, method implementations rely on cryptographic primitives found within the `libsodium <https://github.com/jedisct1/libsodium>`__ library.
 
 Installation and Usage
 ----------------------
@@ -57,7 +57,10 @@ Below is in illustration of how an instance of the OPRF service might be deploye
 
     app.run()
 
-Once an instance of the above service is running, a client might interact with it as illustrated in the example below. Note the use of the distinct `oprf <https://pypi.org/project/oprf>`__ library to represent a data instance (which is itself a wrapper for an `Ed25519 <https://ed25519.cr.yp.to>`__ group element as represented by an instance of the ``point`` class in the `oblivious <https://pypi.org/project/oblivious>`__ library)::
+.. |point| replace:: ``point``
+.. _point: https://oblivious.readthedocs.io/en/6.0.0/_source/oblivious.ristretto.html#oblivious.ristretto.point
+
+Once an instance of the above service is running, a client might interact with it as illustrated in the example below. Note the use of the distinct `oprf <https://pypi.org/project/oprf>`__ library to represent a data instance (which is itself a wrapper for an `Ed25519 <https://ed25519.cr.yp.to>`__ group element as represented by an instance of the |point|_ class in the `oblivious <https://pypi.org/project/oblivious>`__ library)::
 
     import json
     import requests
