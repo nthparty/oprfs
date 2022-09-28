@@ -38,20 +38,22 @@ def key_base64() -> str:
     >>> len(base64.standard_b64decode(key_base64()))
     32
     """
-    return base64.standard_b64encode(bcl.symmetric.secret()).decode('utf-8')
+    return base64.standard_b64encode(key()).decode('utf-8')
 
 def mask(
         k: bcl.secret,
-        m: Optional[oprf.mask] = None,
+        m: Optional[bcl.cipher] = None,
         d: Optional[oprf.data] = None
-    ) -> Union[oprf.mask, oprf.data]:
+    ) -> Union[bcl.cipher, oprf.data]:
     """
-    Function implementing a masking service. This function returns a new
-    :obj:`~oprf.oprf.mask` object encrypted using the supplied
-    :obj:`~bcl.bcl.secret` key (if no additional parameters are supplied), or
-    decrypts and applies the supplied :obj:`~oprf.oprf.mask` to a
-    :obj:`~oprf.oprf.data` object (if both an encrypted :obj:`~oprf.oprf.mask`
-    object and a :obj:`~oprf.oprf.data` object are supplied).
+    Function implementing a masking service. If only a :obj:`~bcl.bcl.secret`
+    key is supplied, this function creates a :obj:`~oprf.oprf.mask` object,
+    encrypts it using the supplied :obj:`~bcl.bcl.secret` key, and returns
+    the resulting :obj:`~bcl.bcl.cipher` object. If an encrypted
+    :obj:`~oprf.oprf.mask` object and a :obj:`~oprf.oprf.data` object are
+    also supplied, it decrypts the supplied :obj:`~bcl.bcl.cipher` object into a
+    :obj:`~oprf.oprf.mask` object, applies it to the :obj:`~oprf.oprf.data`
+    object, and returns the result.
 
     >>> k = key()
     >>> m = mask(k)
@@ -59,11 +61,11 @@ def mask(
     The two objects ``k`` and ``m`` can now be used to mask data.
 
     >>> d = oprf.data.hash('abc')
-    >>> mask(k, m, d) == oprf.mask(bcl.symmetric.decrypt(k, bcl.cipher(m)))(d)
+    >>> mask(k, m, d) == oprf.mask(bcl.symmetric.decrypt(k, m))(d)
     True
 
-    If a :obj:`~oprf.oprf.mask` object is supplied, a :obj:`~oprf.oprf.data`
-    object must also be supplied.
+    If an encrypted :obj:`~oprf.oprf.mask` object is supplied, a
+    :obj:`~oprf.oprf.data` object must also be supplied.
 
     >>> mask(k, m)
     Traceback (most recent call last):
@@ -72,7 +74,7 @@ def mask(
     """
     # If no mask is supplied, return a new encrypted mask.
     if m is None:
-        return oprf.mask(bcl.symmetric.encrypt(k, oprf.mask()))
+        return bcl.symmetric.encrypt(k, oprf.mask())
 
     if d is None:
         raise ValueError('data to be masked must be supplied')
